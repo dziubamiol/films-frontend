@@ -4,6 +4,11 @@ Change ```export type * ...``` to ```export * ...``` inside ```/node-modules/tes
 
 This is a library issue.
 
+## ```.env``` structure:
+
+```REACT_APP_DOMAIN=<DOMAIN_FOR_API_CALLS>```
+
+
 ## Available Scripts
 
 In the project directory, you can run:
