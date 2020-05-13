@@ -88,6 +88,9 @@ export interface IFilmQuery {
     [key: string]: string | number | undefined;
 }
 
+/**
+ * @description get films by search query
+ */
 export const getFilms = (query: IFilmQuery): ThunkResult<Promise<void>> => async (dispatch: Dispatch) => {
     let queryString = '';
 
@@ -119,12 +122,22 @@ export const getFilms = (query: IFilmQuery): ThunkResult<Promise<void>> => async
                     dispatch(updateFilms(filmsMap));
                     dispatch(stopFetchingFilms())
                 })
+            } else if (res.status === HTTPStatus.UNPROCESSABLE_ENTITY) {
+                dispatch(deleteNotification());
+                dispatch(setNotification('Invalid search', 'error'));
+                dispatch(stopFetchingFilms());
             } else {
-                dispatch(stopFetchingFilms())
+                dispatch(deleteNotification());
+                dispatch(setNotification(`Unknown search error ${res.status}`, 'error'));
+                dispatch(stopFetchingFilms());
             }
         }).catch();
 }
 
+
+/**
+ * @description create film from json
+ */
 export const addFilm = (film: INewFilm): ThunkResult<Promise<void>> => async (dispatch: Dispatch) => {
     return fetch(`${process.env.REACT_APP_DOMAIN}/add`, {
         method: 'POST',

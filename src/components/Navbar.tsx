@@ -18,27 +18,7 @@ import { turnDeleteOff, turnDeleteOn } from '../actions/delete';
 import useForm from '../hooks/useForm';
 import { getFilms, IFilmQuery } from '../actions/films';
 import useDebounce from '../hooks/useDebounce';
-
-const useStyles = makeStyles({
-    controls: {
-        display: 'flex',
-        alignItems: 'center',
-        marginLeft: '10px'
-    },
-    search: {
-        display: 'flex',
-        alignItems: 'center',
-        width: '300px',
-        marginLeft: '12px'
-    },
-    searchIcon: {
-        padding: '8px',
-        color: 'rgba(0, 0, 0, 0.54)'
-    },
-    loginButton: {
-        marginLeft: 'auto'
-    }
-})
+import useStyles from './styles/navbar';
 
 export interface INavbarProps {
     logout: () => void;
@@ -50,6 +30,11 @@ export interface INavbarProps {
     getFilms: (query: IFilmQuery) => void;
 }
 
+
+/**
+ *
+ * @description draws navbar on the top of application
+ */
 const Navbar = (props: INavbarProps) => {
     const classes = useStyles();
     const history = useHistory();
@@ -75,6 +60,8 @@ const Navbar = (props: INavbarProps) => {
     }
     const debounceSubmit = useDebounce(500, submit);
 
+
+    /* event handlers */
     const applySearchOnTyping = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFormData(event);
         debounceSubmit();
@@ -151,6 +138,7 @@ const Navbar = (props: INavbarProps) => {
                     onClick={loginClickHandler}
                     className={classes.loginButton}
                     color='inherit'
+                    name='user'
                 >
                     <AccountCircleIcon/>
                 </IconButton>

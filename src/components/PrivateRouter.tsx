@@ -7,6 +7,10 @@ interface IPrivateRouter extends RouteProps {
     isAuthenticated: boolean;
 }
 
+/**
+ *
+ * @description handle private routes routing
+ */
 const PrivateRoute = (props: IPrivateRouter) => {
     const {redirectPath, isAuthenticated, children, ...rest} = props;
 

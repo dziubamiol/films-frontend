@@ -12,6 +12,11 @@ const readingSequence = ['title', 'release', 'format', 'actor'];
 export class FileParserError extends Error {
 }
 
+/**
+ * @description films from file
+ * @param event {FileReceiveEvent} - which file to parse
+ * @param submit {(error: FileParserError | null, parsedFilms: Array<IFilmRaw>) => void} with error handler and parsed film data
+ */
 const fileParser = async (event: FileReceiveEvent, submit: (error: FileParserError | null, parsedFilms: Array<IFilmRaw>) => void) => {
     if (event.file !== null) {
         const reader = new FileReader();

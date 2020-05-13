@@ -46,7 +46,9 @@ const invalidateWithError = (dispatch: any, message: string) => {
 
 export type ThunkResult<R> = ThunkAction<R, IRootState, undefined, TAuthAction>;
 
-
+/**
+ * @description check user session
+ */
 export const checkAuth = (): ThunkResult<Promise<void>> => async (dispatch: Dispatch) => {
     return fetch(`${process.env.REACT_APP_DOMAIN}/user/me`, {
         credentials: 'include'
@@ -60,7 +62,9 @@ export const checkAuth = (): ThunkResult<Promise<void>> => async (dispatch: Disp
         });
 }
 
-
+/**
+ * @description delete user session
+ */
 export const logout = (): ThunkResult<Promise<void>> => async (dispatch: Dispatch) => {
     return fetch(`${process.env.REACT_APP_DOMAIN}/user/logout/`,
         {
@@ -81,7 +85,9 @@ export interface IJoin {
 export interface ILogin extends IJoin {
 }
 
-
+/**
+ * @description send credentials and validate
+ */
 export const login = (credentials: ILogin): ThunkResult<Promise<void>> => async (dispatch: Dispatch) => {
     return fetch(`${process.env.REACT_APP_DOMAIN}/user/login/`,
         {
@@ -101,6 +107,9 @@ export const login = (credentials: ILogin): ThunkResult<Promise<void>> => async 
     });
 }
 
+/**
+ * @description send new credentials and validate
+ */
 export const join = (credentials: IJoin): ThunkResult<Promise<void>> => async (dispatch: Dispatch) => {
     return fetch(`${process.env.REACT_APP_DOMAIN}/user/join`,
         {

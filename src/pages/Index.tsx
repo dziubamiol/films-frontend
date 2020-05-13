@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core';
 import Film from './../components/Film';
 import Navbar from '../components/Navbar';
 import { connect } from 'react-redux';
@@ -11,16 +10,8 @@ import Add from './../components/Add';
 import { INotification } from '../actions/notifications';
 import Alert from '../components/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import useStyles from './styles/index';
 
-const useStyles = makeStyles({
-    page: {
-        backgroundColor: "#f3f3f3",
-        minHeight: '100%'
-    },
-    filmsContainer: {
-        padding: '0 25px 25px 25px'
-    },
-})
 
 export interface IIndexProps {
     isFetching: boolean;
@@ -29,6 +20,10 @@ export interface IIndexProps {
     notification: INotification,
 }
 
+/**
+ *
+ * @description draws main page with films and all tools to manipulate
+ */
 const Index = (props: IIndexProps) => {
     const classes = useStyles();
     const [sortSearchOpen, setSortSearchOpen] = useState(false);

@@ -1,5 +1,8 @@
 import Joi from '@hapi/joi';
 
+/**
+ * @description login form validator
+ */
 const validator = Joi.object().keys({
     username: Joi.string()
         .required()

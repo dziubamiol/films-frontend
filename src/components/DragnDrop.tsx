@@ -54,6 +54,10 @@ export interface IDragnDrop {
     className?: string;
 }
 
+/**
+ *
+ * @description draws simple drag n drop field
+ */
 const DragnDrop = (props: IDragnDrop) => {
     const classes = useStyles();
     const [dragEntered, setDragEntered] = useState(false);

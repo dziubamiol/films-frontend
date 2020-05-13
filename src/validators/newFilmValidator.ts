@@ -1,5 +1,8 @@
 import Joi  from '@hapi/joi';
 
+/**
+ * @description film form validator
+ */
 const validator = Joi.object().keys({
     name: Joi.string()
         .required()

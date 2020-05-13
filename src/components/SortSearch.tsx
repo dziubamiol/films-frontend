@@ -9,51 +9,12 @@ import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
 import Button from '@material-ui/core/Button';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import useForm from '../hooks/useForm';
-import makeStyles from '@material-ui/core/styles/makeStyles';
 import { getFilms, IFilmQuery } from '../actions/films';
 import { connect } from 'react-redux';
 import searchValidator from '../validators/searchValidator';
 import useValidator from '../hooks/useValidator';
 import useDebounce from '../hooks/useDebounce';
-
-
-const useStyles = makeStyles({
-    filtersContainer: {},
-    searchBy: {},
-    filterBy: {
-        height: '50%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '5px 20px 5px 20px',
-        '& p': {
-            fontFamily: 'sans-serif',
-            fontSize: '1.2rem',
-            marginRight: '10px'
-        },
-        '& .textField:first-child': {
-            marginRight: '10px'
-        }
-
-    },
-    dropdown: {
-        width: '200px',
-        marginLeft: '25px',
-        marginRight: '10px',
-    },
-    iconActive: {
-        color: '#2196f3'
-    },
-    filterButton: {
-        marginLeft: '40px'
-    },
-    inputs: {
-        width: '250px',
-    },
-    inputContainer: {
-        marginRight: '10px'
-    }
-});
+import useStyles from './styles/seartsearch';
 
 
 export interface ISortSearchProps {
@@ -67,6 +28,10 @@ interface ISearch {
     actor?: string;
 }
 
+/**
+ *
+ * @description draws top search and sorting form
+ */
 const SortSearch = (props: ISortSearchProps) => {
     const [sortName, setSortName] = useState<'name' | 'releaseYear'>('name');
     const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
