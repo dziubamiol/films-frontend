@@ -1,4 +1,4 @@
-#IMPORTANT
+# IMPORTANT
 Change ```export type * ...``` to ```export * ...``` inside ```/node-modules/testing-library__react/node-modules/pretty-format/build/index.d.ts``` and inside
 ```/node-modules/@testing-library/node-modules/pretty-format/build/index.d.ts```
 
