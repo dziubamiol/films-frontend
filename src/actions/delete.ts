@@ -50,7 +50,7 @@ export type ThunkResult<R> = ThunkAction<R, IRootState, undefined, TDeleteAction
  * @description send request to delete film and delete it from the store
  */
 export const deleteFilm = (id: string): ThunkResult<Promise<void>> => async (dispatch: Dispatch) => {
-    return fetch(`${process.env.REACT_APP_DOMAIN}/remove?id=${id}`, {
+    return fetch(`${process.env.REACT_APP_DOMAIN}/films/remove?id=${id}`, {
         credentials: 'include',
         method: 'DELETE'
     })

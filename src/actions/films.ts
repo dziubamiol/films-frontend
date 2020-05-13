@@ -2,6 +2,7 @@ import { Dispatch } from 'redux';
 import * as HTTPStatus from 'http-status-codes';
 import { ThunkResult } from './delete';
 import { deleteNotification, setNotification } from './notifications';
+import { getStatusMessage } from '../misc/StatusMessages';
 
 export const UPDATE_FILMS = 'UPDATE_FILMS';
 export const FETCH_FILMS = 'FETCH_FILMS';
@@ -122,13 +123,11 @@ export const getFilms = (query: IFilmQuery): ThunkResult<Promise<void>> => async
                     dispatch(updateFilms(filmsMap));
                     dispatch(stopFetchingFilms())
                 })
-            } else if (res.status === HTTPStatus.UNPROCESSABLE_ENTITY) {
-                dispatch(deleteNotification());
-                dispatch(setNotification('Invalid search', 'error'));
-                dispatch(stopFetchingFilms());
             } else {
+                const message = getStatusMessage(res.status);
+
                 dispatch(deleteNotification());
-                dispatch(setNotification(`Unknown search error ${res.status}`, 'error'));
+                dispatch(setNotification(message, 'error'));
                 dispatch(stopFetchingFilms());
             }
         }).catch();
@@ -139,7 +138,7 @@ export const getFilms = (query: IFilmQuery): ThunkResult<Promise<void>> => async
  * @description create film from json
  */
 export const addFilm = (film: INewFilm): ThunkResult<Promise<void>> => async (dispatch: Dispatch) => {
-    return fetch(`${process.env.REACT_APP_DOMAIN}/add`, {
+    return fetch(`${process.env.REACT_APP_DOMAIN}/films/add`, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -155,8 +154,10 @@ export const addFilm = (film: INewFilm): ThunkResult<Promise<void>> => async (di
                 dispatch(deleteNotification());
                 dispatch(setNotification('Film with same name and year already exist', 'warning'));
             } else {
+                const message = getStatusMessage(res.status);
+
                 dispatch(deleteNotification());
-                dispatch(setNotification(`Unknown error, status: ${res.status}`, 'error'));
+                dispatch(setNotification(message, 'error'));
             }
         })
 }

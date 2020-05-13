@@ -21,7 +21,8 @@ const useStyles = makeStyles({
         fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
         fontWeight: 400,
         '&:hover': {
-            borderColor: 'rgba(0, 0, 0, 0.87)'
+            borderColor: 'rgba(0, 0, 0, 0.87)',
+            cursor: 'pointer'
         },
     },
     focused: {
