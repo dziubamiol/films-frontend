@@ -11,6 +11,7 @@ import { INotification } from '../actions/notifications';
 import Alert from '../components/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import useStyles from './styles/index';
+import { Pagination } from '@material-ui/lab';
 
 
 export interface IIndexProps {
@@ -18,6 +19,7 @@ export interface IIndexProps {
     films: TFilms;
     getFilms: (query: IFilmQuery) => void;
     notification: INotification,
+    totalFilms: number
 }
 
 /**
@@ -29,21 +31,29 @@ const Index = (props: IIndexProps) => {
     const [sortSearchOpen, setSortSearchOpen] = useState(false);
     const [snackOpened, setSnackOpened] = useState(false);
     const [showAdd, setShowAdd] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
 
-    const {isFetching, films, getFilms, notification} = props;
+    const {isFetching, films, getFilms, notification, totalFilms} = props;
 
     /* get films onload */
     useEffect(() => {
         getFilms({
-            offset: 0,
-            pageSize: 1000,
+            offset: currentPage - 1,
+            pageSize: 10,
         });
-    }, [getFilms]);
+    }, [getFilms, currentPage]);
 
     useEffect(() => {
         setSnackOpened(notification.notification);
 
-    }, [notification.notification])
+    }, [notification.notification]);
+
+    useEffect(() => {
+        if (currentPage > Math.ceil(totalFilms / 10 ) && currentPage > 1) {
+            setCurrentPage(prevState => prevState - 1);
+        }
+
+    }, [totalFilms])
 
     const sortSearchHandler = () => {
         setSortSearchOpen(previous => !previous);
@@ -55,6 +65,10 @@ const Index = (props: IIndexProps) => {
 
     const showAddHandler = () => {
         setShowAdd(previous => !previous);
+    }
+
+    const setPage = (_: any, value: number) => {
+        setCurrentPage(value);
     }
 
     const renderedFilms: Array<React.ReactNode> = [];
@@ -77,21 +91,42 @@ const Index = (props: IIndexProps) => {
                 sortSearchHandler={sortSearchHandler}
                 showAddHandler={showAddHandler}
             />
+
             {isFetching ? <LinearProgress/> : null}
+
             <div className={classes.filmsContainer}
                  style={!isFetching ? {
                      paddingTop: '4px',
                  } : undefined}
             >
+
+                {totalFilms > 0 ? <Pagination
+                    count={Math.ceil(totalFilms / 10)}
+                    className={classes.pagination}
+                    onChange={setPage}
+                    page={currentPage}
+                /> : null}
+
                 <Add
                     open={showAdd}
                 />
+
                 {renderedFilms}
+
+                {totalFilms > 0 ? <Pagination
+                    count={Math.ceil(totalFilms / 10)}
+                    className={classes.pagination}
+                    onChange={setPage}
+                    page={currentPage}
+                /> : null}
+
             </div>
+
             <SortSearch
                 open={sortSearchOpen}
                 openCloseHandler={sortSearchHandler}
             />
+
             <Snackbar
                 open={snackOpened}
                 autoHideDuration={5000}
@@ -112,7 +147,8 @@ const mapStateToProps = (state: IRootState) => {
     return {
         isFetching: state.films.isFetching,
         films: state.films.films,
-        notification: state.notification
+        notification: state.notification,
+        totalFilms: state.films.total,
     }
 }
 

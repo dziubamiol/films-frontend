@@ -15,12 +15,16 @@ import searchValidator from '../validators/searchValidator';
 import useValidator from '../hooks/useValidator';
 import useDebounce from '../hooks/useDebounce';
 import useStyles from './styles/seartsearch';
+import { IRootState } from '../reducers/root';
+import { updateSearch } from '../actions/search';
 
 
 export interface ISortSearchProps {
     open: boolean;
     openCloseHandler: () => void;
     getFilms: (query: IFilmQuery) => void;
+    search: Map<string, string>;
+    updateSearch: (search: Map<string, string>) => void;
 }
 
 interface ISearch {
@@ -35,11 +39,11 @@ interface ISearch {
 const SortSearch = (props: ISortSearchProps) => {
     const [sortName, setSortName] = useState<'name' | 'releaseYear'>('name');
     const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
-    const [searchForm, fillSearchForm] = useForm(); // search can be performed for any field, API has possibilities for this
+    const [searchForm, fillSearchForm] = useForm({ initState: props.search}); // search can be performed for any field, API has possibilities for this
     const [errors, validate] = useValidator(searchValidator);
     const classes = useStyles();
 
-    const {getFilms, open, openCloseHandler} = props;
+    const {getFilms, open, openCloseHandler, updateSearch} = props;
 
     const sortNameHandler = (event: React.ChangeEvent<any>) => {
         setSortName(event.target.value);
@@ -71,6 +75,7 @@ const SortSearch = (props: ISortSearchProps) => {
             delete getFilmsQuery.actor;
         }
 
+        updateSearch(searchForm);
         getFilms(getFilmsQuery);
     }
 
@@ -92,7 +97,7 @@ const SortSearch = (props: ISortSearchProps) => {
 
     return (
         <SwipeableDrawer
-            anchor='top'
+            anchor='left'
             open={open}
             onOpen={() => false}
             onClose={openCloseHandler}
@@ -111,6 +116,7 @@ const SortSearch = (props: ISortSearchProps) => {
                             onChange={applySearchOnTyping}
                             error={errors.has('name')}
                             className={classes.inputs}
+                            value={searchForm.get('name')}
                         />
                     </div>
                     <div>
@@ -122,6 +128,7 @@ const SortSearch = (props: ISortSearchProps) => {
                             onChange={applySearchOnTyping}
                             error={errors.has('actor')}
                             className={classes.inputs}
+                            value={searchForm.get('actor')}
                         />
                     </div>
                     <Button
@@ -169,12 +176,21 @@ const SortSearch = (props: ISortSearchProps) => {
     );
 };
 
+const mapStateToProps = (state: IRootState) => {
+    return {
+        search: state.search.parameters
+    }
+}
+
 const mapDispatchToProps = (dispatch: any) => {
     return {
         getFilms: (query: IFilmQuery) => {
-            dispatch(getFilms(query))
+            dispatch(getFilms(query));
+        },
+        updateSearch: (search: Map<string, string>) => {
+            dispatch(updateSearch(search));
         }
     }
 }
 
-export default connect(undefined, mapDispatchToProps)(SortSearch);
+export default connect(mapStateToProps, mapDispatchToProps)(SortSearch);

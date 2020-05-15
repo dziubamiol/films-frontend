@@ -8,9 +8,11 @@ const useStyles = makeStyles({
         fontFamily: 'sans-serif',
         padding: '30px',
         boxSizing: 'border-box',
-        marginTop: '25px'
+        marginTop: '15px'
     },
-    description: {},
+    description: {
+        flex: '2'
+    },
     title: {
         margin: 0,
         fontSize: '1.5rem',
@@ -28,10 +30,15 @@ const useStyles = makeStyles({
     },
     special: {
         display: 'flex',
+        flex: '1 4',
         flexDirection: 'column',
         justifyContent: 'space-between',
+        overflow: 'hidden',
         '& p': {
-            margin: 0
+            margin: 0,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            textAlign: 'end',
         },
         '& .delete': {
             float: 'right',
@@ -49,6 +56,9 @@ const useStyles = makeStyles({
             visibility: 'hidden',
             opacity: 0,
             transition: 'visibility 0s .1s, opacity .1s linear'
+        },
+        '& div': {
+
         }
     },
 });

@@ -8,10 +8,10 @@ const useStyles = makeStyles({
         fontFamily: 'sans-serif',
         padding: '30px',
         boxSizing: 'border-box',
-        marginTop: '25px'
+        marginTop: '15px'
     },
     description: {
-        flex: '1'
+        flex: '4'
     },
     title: {
         margin: 0,
@@ -46,6 +46,17 @@ const useStyles = makeStyles({
         },
         '&:hover': {
             color: '#2e7d32'
+        }
+    },
+    '@media only screen and (max-width: 500px)': {
+        dragndrop: {
+            display: 'none',
+        }
+    },
+    titleInput: {
+        '& label': {
+            backgroundColor: '#fff',
+            paddingRight: '5px'
         }
     }
 });

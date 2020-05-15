@@ -6,35 +6,31 @@ const useStyles = makeStyles({
     filterBy: {
         height: '50%',
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         padding: '5px 20px 5px 20px',
         '& p': {
             fontFamily: 'sans-serif',
             fontSize: '1.2rem',
-            marginRight: '10px'
         },
         '& .textField:first-child': {
-            marginRight: '10px'
         }
 
     },
     dropdown: {
         width: '200px',
-        marginLeft: '25px',
-        marginRight: '10px',
     },
     iconActive: {
         color: '#2196f3'
     },
     filterButton: {
-        marginLeft: '40px'
+        margin: '8px 0 8px 0'
     },
     inputs: {
         width: '250px',
     },
     inputContainer: {
-        marginRight: '10px'
     }
 });
 

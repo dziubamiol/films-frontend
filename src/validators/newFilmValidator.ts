@@ -6,10 +6,11 @@ import Joi  from '@hapi/joi';
 const validator = Joi.object().keys({
     name: Joi.string()
         .required()
-        .regex(/^[A-Za-z]+$/)
+        .regex(/^[A-Za-zаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяЯіІїЇҐґ0-9 ]+$/)
         .messages({
             "string.pattern.base": "Alphabetic only",
-            "any.required": "Name is required"
+            "any.required": "Name is required",
+            "string.empty": "Name is required"
         }),
     releaseYear: Joi.number()
         .required()
@@ -25,12 +26,14 @@ const validator = Joi.object().keys({
         .required(),
     actors: Joi.array()
         .required()
+        .unique()
         .min(1)
-        .items(Joi.string().regex(/^[A-Za-z ,]+$/))
+        .items(Joi.string().regex(/^[A-Za-zаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяЯіІїЇҐґ ,]+$/))
         .messages({
             "string.pattern.base": "Alphabetic and comas only",
             "any.required": "Actors is required",
-            "string.empty": "Required field"
+            "string.empty": "Required field",
+            "array.unique": "Only unique actors"
         })
 });
 

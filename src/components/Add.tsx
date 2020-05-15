@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
-import makeStyles from '@material-ui/core/styles/makeStyles';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
@@ -19,7 +18,7 @@ import { deleteNotification, setNotification, TNotificationType } from '../actio
 import useStyles from './styles/add';
 
 export interface IAddProps {
-    addFilm: (newFilm: INewFilm) => void;
+    addFilm: (newFilm: INewFilm, successAction?: any) => void;
     open: boolean;
     setNotification: (notification: string, type: TNotificationType) => void;
     deleteNotification: () => void;
@@ -31,7 +30,9 @@ export interface IAddProps {
  */
 const Add = (props: IAddProps) => {
     const classes = useStyles();
-    const [formData, setFormDate] = useForm();
+    const [formData, setFormDate, resetForm] = useForm({
+        fields: ['name', 'releaseYear', 'actors']
+    });
     const [format, setFormat] = useState('DVD');
     const [errors, validate] = useValidator(newFilmValidator);
     const [parsedFilms, setParsedFilms] = useState<Array<IFilmRaw>>([]);
@@ -57,7 +58,7 @@ const Add = (props: IAddProps) => {
     }
 
     const send = (newFilm: INewFilm) => {
-        addFilm(newFilm);
+        addFilm(newFilm, resetForm);
     }
 
     interface INewFilmRaw {
@@ -91,12 +92,15 @@ const Add = (props: IAddProps) => {
                 <div className={classes.description}>
                     <div className={classes.title}>
                         <TextField
+                            className={classes.titleInput}
                             variant='outlined'
                             margin='dense'
                             label={errors.has('name') ? errors.get('name') : 'Name'}
                             name='name'
                             onChange={setFormDate}
                             error={errors.has('name')}
+                            value={formData.get('name')}
+                            fullWidth={true}
                         />
                     </div>
                     <div className={classes.specs}>
@@ -107,6 +111,7 @@ const Add = (props: IAddProps) => {
                             name='releaseYear'
                             onChange={setFormDate}
                             error={errors.has('releaseYear')}
+                            value={formData.get('releaseYear')}
                         />
                         <TextField
                             variant='outlined'
@@ -115,6 +120,7 @@ const Add = (props: IAddProps) => {
                             name='actors'
                             onChange={setFormDate}
                             error={errors.has('actors')}
+                            value={formData.get('actors')}
                         />
                         <FormControl
                         >
@@ -156,7 +162,7 @@ const Add = (props: IAddProps) => {
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        addFilm: (newFilm: INewFilm) => dispatch(addFilm(newFilm)),
+        addFilm: (newFilm: INewFilm, successAction?: any) => dispatch(addFilm(newFilm, successAction)),
         setNotification: (notification: string, type: TNotificationType) => dispatch(setNotification(notification, type)),
         deleteNotification: () => dispatch(deleteNotification()),
     }

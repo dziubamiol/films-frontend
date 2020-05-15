@@ -4,19 +4,22 @@ import remove, { IDelete } from './delete';
 import films, { IFilms } from './films';
 import { INotification } from '../actions/notifications';
 import notification from './notification';
+import search, { ISearch } from './search';
 
 export interface IRootState {
     auth: IAuth;
     remove: IDelete;
     films: IFilms;
-    notification: INotification
+    notification: INotification,
+    search: ISearch
 }
 
 const rootReducer = combineReducers({
     auth,
     remove,
     films,
-    notification
+    notification,
+    search,
 });
 
 export default rootReducer;

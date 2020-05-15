@@ -18,6 +18,11 @@ export interface IFilm {
     actors: Array<string>
 }
 
+export interface IFilmPayload {
+    total: number;
+    films: Array<IFilm>
+}
+
 export interface INewFilm {
     name?: string,
     releaseYear?: number,
@@ -37,8 +42,14 @@ export type TFilmAction = {
     type: string,
     deleteID?: string,
     films?: TFilms,
-    film?: INewFilm
+    film?: IFilmNormalized,
+    total?: number,
+    id?: string
 };
+
+export interface IAddedFilmPayload {
+    id: string;
+}
 
 export type TFilms = Map<string, IFilmNormalized>
 
@@ -55,10 +66,11 @@ export const deleteFilmfromList = (id: string): TFilmAction => {
     }
 }
 
-export const addFilmToList = (film: INewFilm): TFilmAction => {
+export const addFilmToList = (film: IFilmNormalized, id: string): TFilmAction => {
     return {
         type: ADD_FILM,
         film: film,
+        id: id,
     }
 }
 
@@ -68,10 +80,11 @@ export const stopFetchingFilms = (): TFilmAction => {
     }
 }
 
-export const updateFilms = (films: TFilms): TFilmAction => {
+export const updateFilms = (films: TFilms, total: number): TFilmAction => {
     return {
         type: UPDATE_FILMS,
-        films: films
+        films: films,
+        total: total
     }
 }
 
@@ -96,7 +109,10 @@ export const getFilms = (query: IFilmQuery): ThunkResult<Promise<void>> => async
     let queryString = '';
 
     for (const param of Object.keys(query)) {
-        query[param] !== undefined && (queryString += `${param}=${(query[param] as string | number).toString()}&`);
+        console.log(query[param]);
+        query[param] !== undefined &&
+        query[param] !== ''
+        && (queryString += `${param}=${(query[param] as string | number).toString()}&`);
     }
 
     dispatch(fetchFilms());
@@ -105,10 +121,10 @@ export const getFilms = (query: IFilmQuery): ThunkResult<Promise<void>> => async
     })
         .then((res: Response) => {
             if (res.status === HTTPStatus.OK) {
-                res.json().then((data: Array<IFilm>) => {
+                res.json().then((data: IFilmPayload) => {
                     const filmsMap: TFilms = new Map([]);
 
-                    for (const film of data) {
+                    for (const film of data.films) {
                         const filmNormalized: IFilmNormalized = {
                             id: film._id,
                             releaseYear: film.releaseYear,
@@ -119,8 +135,8 @@ export const getFilms = (query: IFilmQuery): ThunkResult<Promise<void>> => async
 
                         filmsMap.set(film._id, filmNormalized);
                     }
-
-                    dispatch(updateFilms(filmsMap));
+                    console.log(data.total);
+                    dispatch(updateFilms(filmsMap, data.total));
                     dispatch(stopFetchingFilms())
                 })
             } else {
@@ -137,7 +153,7 @@ export const getFilms = (query: IFilmQuery): ThunkResult<Promise<void>> => async
 /**
  * @description create film from json
  */
-export const addFilm = (film: INewFilm): ThunkResult<Promise<void>> => async (dispatch: Dispatch) => {
+export const addFilm = (film: INewFilm, successAction?: any): ThunkResult<Promise<void>> => async (dispatch: Dispatch) => {
     return fetch(`${process.env.REACT_APP_DOMAIN}/films/add`, {
         method: 'POST',
         credentials: 'include',
@@ -148,8 +164,16 @@ export const addFilm = (film: INewFilm): ThunkResult<Promise<void>> => async (di
     })
         .then((res: Response) => {
             if (res.status === HTTPStatus.CREATED) {
-                dispatch(deleteNotification());
-                dispatch(setNotification('Created new film', 'success'));
+                res.json().then((body: IAddedFilmPayload) => {
+
+                    const normalizedFilm: IFilmNormalized = film as IFilmNormalized;
+                    normalizedFilm.id = body.id
+
+                    dispatch(addFilmToList(normalizedFilm, body.id));
+                    dispatch(deleteNotification());
+                    dispatch(setNotification('Created new film', 'success'));
+                    successAction && successAction(); // perform action if success
+                });
             } else if (res.status === HTTPStatus.NOT_MODIFIED) {
                 dispatch(deleteNotification());
                 dispatch(setNotification('Film with same name and year already exist', 'warning'));
