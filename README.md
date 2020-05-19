@@ -11,14 +11,12 @@ This is a library issue.
 # Startup procedure
 
    1. Install last lts node.js https://nodejs.org/en/
-   2. Install mongodb https://docs.mongodb.com/manual/installation/
-   3. Create db inside mongodb with names: ```users```, ```films```
-   4. Install backend following ```Startup procedure``` from https://github.com/dziubamiol/films-backend
-   5. Pull master branch from https://github.com/dziubamiol/films-frontend
-   6. Install all packages using: ```npm i```
-   7. Setup ```.env``` following ```.env``` structure above. ```REACT_APP_DOMAIN``` should be equal backend domain that runs locally
+   2. Install backend following ```Startup procedure``` from https://github.com/dziubamiol/films-backend
+   3. Pull master branch from https://github.com/dziubamiol/films-frontend
+   4. Install all packages using: ```npm i```
+   5. Setup ```.env``` following ```.env``` structure above. ```REACT_APP_DOMAIN``` should be equal backend domain that runs locally
    
-   8. Start project locally running ```npm run start```, it should start at http://localhost:3000
+   6. Start project locally running ```npm run start```, it should start at http://localhost:3000
    
     
 
