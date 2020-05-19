@@ -53,7 +53,7 @@ const Index = (props: IIndexProps) => {
             setCurrentPage(prevState => prevState - 1);
         }
 
-    }, [totalFilms])
+    }, [totalFilms]);
 
     const sortSearchHandler = () => {
         setSortSearchOpen(previous => !previous);

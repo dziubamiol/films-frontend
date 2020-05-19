@@ -5,7 +5,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { connect } from 'react-redux';
 import { IRootState } from '../reducers/root';
 import { deleteFilm } from '../actions/delete';
-import { deleteFilmfromList } from '../actions/films';
+import { deleteFilmfromList, getFilms } from '../actions/films';
 import useStyles from './styles/film';
 import Button from '@material-ui/core/Button';
 import Popover from '@material-ui/core/Popover';

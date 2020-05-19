@@ -150,6 +150,9 @@ export const getFilms = (query: IFilmQuery): ThunkResult<Promise<void>> => async
 }
 
 
+
+
+
 /**
  * @description create film from json
  */
